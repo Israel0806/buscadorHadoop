@@ -1,0 +1,109 @@
+
+hadoop com.sun.tools.javac.Main PageRank.java
+jar cf pagerank.jar PageRank*.class
+
+
+hadoop jar PageRank.jar PageRank input/web-Google.txt output
+hadoop jar PageRank.jar -i /input/web-Google.txt -o output
+
+hadoop jar pagerank.jar PageRank -i /input/web-Google.txt -o output
+
+
+hadoop dfs -put web-Google-chico.txt input/
+
+
+
+
+
+
+
+hadoop-daemon.sh start datanode
+
+
+
+
+
+
+#remove all
+rm **/*.class *.class *.jar
+
+
+
+
+
+hadoop fs -get output/
+hadoop fs -rm -R output
+hadoop fs -rm -R output2
+hadoop fs -get output2
+
+
+
+
+
+
+
+hadoop  buscador -s "aachen arbol" -p output/result/part-r-00000 -i output2/part-r-00000 -o output3
+
+hadoop jar buscadorHadoop.jar buscadorHadoop -s "aachen arbol" -p output/result/part-r-00000 -i output2/part-r-00000 -o output3
+
+
+
+hadoop com.sun.tools.javac.Main InvertedIndex.java
+jar cf invertedindex.jar InvertedIndex*.class
+hadoop jar invertedindex.jar InvertedIndex /input/data output2/
+
+
+hadoop com.sun.tools.javac.Main PageRank.java
+jar cf pagerank.jar PageRank*.class
+hadoop jar pagerank.jar PageRank -i /input/data -o output
+
+
+
+
+
+
+
+
+--programa para correr
+
+hadoop com.sun.tools.javac.Main buscadorHadoop.java
+jar cf buscadorHadoop.jar buscadorHadoop*.class
+hadoop jar buscadorHadoop.jar buscadorHadoop -s "aachen arbol" -p output/result/part-r-00000 -i output2/part-r-00000 -o output3
+
+
+
+
+-s
+aachen
+-p
+/input/pageRankFile
+-i
+/input/invertedIndexFile
+-o
+output3
+
+hdfs://cluster-cloud-computing-m/home/wilberever100/input/pageRankFile
+hdfs://cluster-cloud-computing-m/home/wilberever100/input/invertedIndexFile
+
+
+
+hadoop jar buscadorHadoop.jar -s "aachen arbol" -p input/pageRankFile -i input/invertedIndexFile -o output3
+
+
+
+
+
+
+
+//delete 
+hadoop fs -rm -R /user/root/output3
+
+//get output
+hadoop fs -get /user/root/output3
+
+//mostrar
+cat output3/result/part-r-00000
+
+
+
+
